@@ -1,42 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Clock } from "lucide-react";
 import { Recipe } from "../types/Recipe";
 import { toTitleCase } from "../utility/toTitleCase";
 import wretch from "wretch";
 
 export default function DiscoverRecipeCard() {
+  const apiKey = import.meta.env.VITE_SPOONACULAR_API;
   const [randomRecipe, setRandomRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchRandomRecipe = async () => {
-      try {
-        const response = await wretch(
-          "https://api.spoonacular.com/recipes/random?limitLicense=true&tags=indian&number=1&exclude-tag=beef%2C%20pork&apiKey=82e7c4ff47a84467a23702f812a8c69c",
-        )
-          .get()
-          .json<{ recipes: Recipe[] }>();
+  const fetchRandomRecipe = useCallback(async () => {
+    try {
+      const response = await wretch(
+        `https://api.spoonacular.com/recipes/random?limitLicense=true&tags=indian&number=1&exclude-tag=beef%2C%20pork&apiKey=${apiKey}`,
+      )
+        .get()
+        .json<{ recipes: Recipe[] }>();
 
-        if (response.recipes.length > 0) {
-          setRandomRecipe(response.recipes[0]);
-        } else {
-          setError("No recipes found");
-        }
-      } catch (error: unknown) {
-        // Handling error correctly for unknown type
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("Error fetching recipe");
-        }
-      } finally {
-        setLoading(false);
+      if (response.recipes.length > 0) {
+        setRandomRecipe(response.recipes[0]);
+      } else {
+        setError("No recipes found");
       }
-    };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Error fetching recipe");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [apiKey]);
 
+  useEffect(() => {
     fetchRandomRecipe();
-  }, []); // Empty dependency array to run only once on mount
+  }, [fetchRandomRecipe]);
 
   if (loading) {
     return (

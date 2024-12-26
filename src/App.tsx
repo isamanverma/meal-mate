@@ -3,7 +3,7 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import HomePage from "./components/HomePage";
 import Signup from "./components/Signup";
 import NotFoundPage from "./components/NotFoundPage";
@@ -12,8 +12,26 @@ import wretch from "wretch";
 import { ApiResponse, Recipe } from "./types/Recipe";
 
 function App() {
+  const apiKey = import.meta.env.VITE_SPOONACULAR_API;
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  const fetchRecipes = useCallback(async () => {
+    try {
+      const response = await wretch(
+        `https://api.spoonacular.com/recipes/random?limitLicense=true&tags=indian&number=28&exclude-tag=beef%2C%20pork&apiKey=${apiKey}`,
+      )
+        .get()
+        .json<ApiResponse>();
+
+      setRecipes(response.recipes);
+
+      localStorage.setItem("recipes", JSON.stringify(response.recipes));
+      localStorage.setItem("lastFetched", new Date().getTime().toString());
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+    }
+  }, [apiKey]);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -39,24 +57,7 @@ function App() {
     }, 600000);
 
     return () => clearInterval(intervalId);
-  }, []);
-
-  const fetchRecipes = async () => {
-    try {
-      const response = await wretch(
-        "https://api.spoonacular.com/recipes/random?limitLicense=true&tags=indian&number=28&exclude-tag=beef%2C%20pork&apiKey=82e7c4ff47a84467a23702f812a8c69c",
-      )
-        .get()
-        .json<ApiResponse>();
-
-      setRecipes(response.recipes);
-
-      localStorage.setItem("recipes", JSON.stringify(response.recipes));
-      localStorage.setItem("lastFetched", new Date().getTime().toString());
-    } catch (error) {
-      console.error("Error fetching recipes:", error);
-    }
-  };
+  }, [fetchRecipes]);
 
   const router = createBrowserRouter([
     {
