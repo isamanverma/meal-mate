@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Recipe } from "../types/Recipe";
-import RecipeCard from "./RecipeCard";
 import { ArrowLeftIcon } from "lucide-react";
+import RecipeCard from "../components/RecipeCard";
 
 interface LikedRecipePageProps {
   recipes: Recipe[];

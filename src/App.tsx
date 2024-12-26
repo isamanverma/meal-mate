@@ -5,11 +5,12 @@ import {
 } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import HomePage from "./components/HomePage";
-import Signup from "./components/Signup";
 import NotFoundPage from "./components/NotFoundPage";
-import LikedRecipePage from "./components/LikedRecipePage";
 import wretch from "wretch";
 import { ApiResponse, Recipe } from "./types/Recipe";
+import Signup from "./pages/Signup";
+import LikedRecipePage from "./pages/LikedRecipePage";
+import RecipeDetails from "./pages/RecipeDetails";
 
 function App() {
   const apiKey = import.meta.env.VITE_SPOONACULAR_API;
@@ -76,6 +77,10 @@ function App() {
     {
       path: "/fav",
       element: <LikedRecipePage recipes={recipes} />,
+    },
+    {
+      path: "/recipe/:id",
+      element: <RecipeDetails />,
     },
   ]);
 

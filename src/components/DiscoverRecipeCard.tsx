@@ -3,8 +3,17 @@ import { Clock } from "lucide-react";
 import { Recipe } from "../types/Recipe";
 import { toTitleCase } from "../utility/toTitleCase";
 import wretch from "wretch";
+import LoadingPage from "../pages/LoadingPage";
 
-export default function DiscoverRecipeCard() {
+interface DiscoverRecipeCardProps {
+  triggerFetch: boolean;
+  onFetchComplete: () => void;
+}
+
+export default function DiscoverRecipeCard({
+  triggerFetch,
+  onFetchComplete,
+}: DiscoverRecipeCardProps) {
   const apiKey = import.meta.env.VITE_SPOONACULAR_API;
   const [randomRecipe, setRandomRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -12,6 +21,8 @@ export default function DiscoverRecipeCard() {
 
   const fetchRandomRecipe = useCallback(async () => {
     try {
+      setLoading(true);
+      setError(null);
       const response = await wretch(
         `https://api.spoonacular.com/recipes/random?limitLicense=true&tags=indian&number=1&exclude-tag=beef%2C%20pork&apiKey=${apiKey}`,
       )
@@ -19,7 +30,11 @@ export default function DiscoverRecipeCard() {
         .json<{ recipes: Recipe[] }>();
 
       if (response.recipes.length > 0) {
-        setRandomRecipe(response.recipes[0]);
+        const fetchedRecipe = response.recipes[0];
+        setRandomRecipe(fetchedRecipe);
+
+        localStorage.setItem("randomRecipe", JSON.stringify(fetchedRecipe));
+        localStorage.setItem("fetchTime", Date.now().toString());
       } else {
         setError("No recipes found");
       }
@@ -31,19 +46,35 @@ export default function DiscoverRecipeCard() {
       }
     } finally {
       setLoading(false);
+      onFetchComplete();
     }
-  }, [apiKey]);
+  }, [apiKey, onFetchComplete]);
 
   useEffect(() => {
-    fetchRandomRecipe();
+    const savedRecipe = localStorage.getItem("randomRecipe");
+    const fetchTime = localStorage.getItem("fetchTime");
+
+    const tenMinutes = 10 * 60 * 1000;
+    const isExpired =
+      fetchTime && Date.now() - parseInt(fetchTime) > tenMinutes;
+
+    if (savedRecipe && !isExpired) {
+      setRandomRecipe(JSON.parse(savedRecipe));
+      setLoading(false);
+    } else {
+      fetchRandomRecipe();
+    }
   }, [fetchRandomRecipe]);
 
+
+  useEffect(() => {
+    if (triggerFetch) {
+      fetchRandomRecipe();
+    }
+  }, [triggerFetch, fetchRandomRecipe]);
+
   if (loading) {
-    return (
-      <div className="ml-auto flex max-w-2xl flex-col justify-evenly rounded-md bg-gray-200 p-5">
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoadingPage/>
   }
 
   if (error) {

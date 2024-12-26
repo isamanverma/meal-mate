@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Header from "./Header";
 import { Navigate } from "react-router-dom";
+import Header from "../components/Header";
 
 interface SignupProps {
   isSignedIn: boolean;
