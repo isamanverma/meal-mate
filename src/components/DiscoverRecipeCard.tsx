@@ -66,7 +66,6 @@ export default function DiscoverRecipeCard({
     }
   }, [fetchRandomRecipe]);
 
-
   useEffect(() => {
     if (triggerFetch) {
       fetchRandomRecipe();
@@ -74,7 +73,7 @@ export default function DiscoverRecipeCard({
   }, [triggerFetch, fetchRandomRecipe]);
 
   if (loading) {
-    return <LoadingPage/>
+    return <LoadingPage />;
   }
 
   if (error) {
@@ -97,7 +96,7 @@ export default function DiscoverRecipeCard({
     <div className="ml-auto flex max-w-2xl flex-col justify-evenly rounded-md bg-gray-200">
       <img
         className="h-auto max-h-[150px] w-full rounded-t-md object-cover lg:max-h-[250px]"
-        src={randomRecipe.image || "/public/assets/images/omlette.jpg"}
+        src={randomRecipe.image || "assets/images/omlette.jpg"}
         alt="Recipe Image"
       />
       <div className="flex flex-col gap-2 p-5">

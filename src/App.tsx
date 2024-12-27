@@ -5,12 +5,13 @@ import {
 } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import HomePage from "./components/HomePage";
-import NotFoundPage from "./components/NotFoundPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import wretch from "wretch";
 import { ApiResponse, Recipe } from "./types/Recipe";
 import Signup from "./pages/Signup";
 import LikedRecipePage from "./pages/LikedRecipePage";
 import RecipeDetails from "./pages/RecipeDetails";
+import { LikedRecipesProvider } from "./context/LikedRecipeContext";
 
 function App() {
   const apiKey = import.meta.env.VITE_SPOONACULAR_API;
@@ -20,7 +21,7 @@ function App() {
   const fetchRecipes = useCallback(async () => {
     try {
       const response = await wretch(
-        `https://api.spoonacular.com/recipes/random?limitLicense=true&tags=indian&number=28&exclude-tag=beef%2C%20pork&apiKey=${apiKey}`,
+        `https://api.spoonacular.com/recipes/random?limitLicense=true&number=28&include-tag=vegetarian&exclude-tag=beef,pork&apiKey=${apiKey}`,
       )
         .get()
         .json<ApiResponse>();
@@ -76,7 +77,7 @@ function App() {
     },
     {
       path: "/fav",
-      element: <LikedRecipePage recipes={recipes} />,
+      element: <LikedRecipePage />,
     },
     {
       path: "/recipe/:id",
@@ -85,9 +86,11 @@ function App() {
   ]);
 
   return (
-    <main className="relative h-screen">
-      <RouterProvider router={router} />
-    </main>
+    <LikedRecipesProvider>
+      <main className="relative h-screen">
+        <RouterProvider router={router} />
+      </main>
+    </LikedRecipesProvider>
   );
 }
 

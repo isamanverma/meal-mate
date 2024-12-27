@@ -1,30 +1,34 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { LikedRecipesContext } from "../../context/LikedRecipeContext";
+import { Recipe } from "../../types/Recipe";
 import HeartIcon from "./Heart";
 
-export default function Favourite() {
-  enum heartColors {
-    red = "#FF162B",
-    transparent = "#000000",
-  }
+interface FavouriteProps {
+  recipe: Recipe;
+}
 
-  const [heartColor, setHeartColor] = useState<string>(heartColors.transparent);
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+export default function Favourite({ recipe }: FavouriteProps) {
+  const { likedRecipes, addRecipe, removeRecipe } =
+    useContext(LikedRecipesContext);
 
-  const changeColor = () => {
-    setIsChecked(!isChecked);
-    setHeartColor(isChecked ? heartColors.transparent : heartColors.red);
+  const isLiked = likedRecipes.some((r) => r.id === recipe.id);
+
+  const toggleFavourite = () => {
+    if (isLiked) {
+      removeRecipe(recipe.id);
+    } else {
+      addRecipe(recipe);
+    }
   };
 
   return (
     <div
-      onClick={changeColor}
+      onClick={toggleFavourite}
       className="my-2 flex w-40 cursor-pointer items-center gap-2 rounded-md bg-white p-2 lg:w-52"
     >
-      <HeartIcon fillColor={heartColor} />
+      <HeartIcon fillColor={isLiked ? "#FF162B" : "#000000"} />
       <span className="lg:text-md text-sm">
-        {heartColor === heartColors.red
-          ? "Added to Favourite"
-          : "Add to Favourite"}
+        {isLiked ? "Remove from Favourite" : "Add to Favourite"}
       </span>
     </div>
   );

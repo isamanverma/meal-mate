@@ -15,10 +15,11 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
     : "";
 
   return (
-    <Link to={`/recipe/${recipe.id}/`}>
-      <div className="w-44 cursor-pointer rounded-md bg-gray-100 p-2 lg:w-[370px]">
+    <div className="w-44 cursor-pointer rounded-md bg-gray-100 p-2 lg:w-[370px]">
+      {/* Link to recipe details */}
+      <Link to={`/recipe/${recipe.id}/`}>
         <img
-          src={recipe.image || "/public/assets/images/food-placeholder.png"}
+          src={recipe.image || "assets/images/food-placeholder.png"}
           alt={recipe.title}
           className="h-24 w-full rounded-md object-cover lg:h-48"
         />
@@ -26,7 +27,6 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
           <h3 className="text-md font-bold lg:text-xl">
             {toTitleCase(recipe.title)}
           </h3>
-
           <div
             className="summary mt-2 line-clamp-4 text-sm text-gray-600 lg:py-5 lg:text-base"
             dangerouslySetInnerHTML={{
@@ -35,7 +35,6 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
                 `<p className="line-clamp-5">This dish is a flavorful and nutritious meal, perfect for any occasion. Packed with a variety of fresh ingredients, it combines unique flavors and textures to create a satisfying experience. Whether you're cooking for a family dinner or preparing a quick meal, this dish is sure to please everyone with its delicious taste and balanced nutrition.</p>`,
             }}
           />
-
           <div className="mt-3 text-xs text-gray-500 lg:mt-5 lg:text-sm">
             <p>
               Prep Time:{" "}
@@ -44,9 +43,10 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
             <p>Diet Type: {getDietType(recipe.vegetarian, recipe.vegan)}</p>
           </div>
         </div>
+      </Link>
 
-        <Favourite />
-      </div>
-    </Link>
+      {/* Pass recipe to Favourite */}
+      <Favourite recipe={recipe} />
+    </div>
   );
 }
