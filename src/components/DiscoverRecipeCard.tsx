@@ -4,6 +4,8 @@ import { Recipe } from "../types/Recipe";
 import { toTitleCase } from "../utility/toTitleCase";
 import wretch from "wretch";
 import LoadingPage from "../pages/LoadingPage";
+import { Link } from "react-router-dom";
+import { cleanRecipeSummary } from "../utility/cleanRecipeSummary";
 
 interface DiscoverRecipeCardProps {
   triggerFetch: boolean;
@@ -24,7 +26,7 @@ export default function DiscoverRecipeCard({
       setLoading(true);
       setError(null);
       const response = await wretch(
-        `https://api.spoonacular.com/recipes/random?limitLicense=true&tags=indian&number=1&exclude-tag=beef%2C%20pork&apiKey=${apiKey}`,
+        `https://api.spoonacular.com/recipes/random?limitLicense=true&number=1&exclude-tag=beef%2C%20pork&apiKey=${apiKey}`,
       )
         .get()
         .json<{ recipes: Recipe[] }>();
@@ -92,39 +94,52 @@ export default function DiscoverRecipeCard({
     );
   }
 
+  const cleanedSummary = randomRecipe.summary
+    ? cleanRecipeSummary(randomRecipe.summary)
+    : "";
+
   return (
-    <div className="ml-auto flex max-w-2xl flex-col justify-evenly rounded-md bg-gray-200">
-      <img
-        className="h-auto max-h-[150px] w-full rounded-t-md object-cover lg:max-h-[250px]"
-        src={randomRecipe.image || "assets/images/omlette.jpg"}
-        alt="Recipe Image"
-      />
-      <div className="flex flex-col gap-2 p-5">
-        <h2 className="text-xl font-bold normal-case">
-          {toTitleCase(randomRecipe.title)}
-        </h2>
+    <div className="relative motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-opacity-in-[0%] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate">
+      <div className="absolute -inset-0.5 rounded-xl bg-amber-800 opacity-90 blur-2xl"></div>
+      <div className="relative ml-auto flex max-w-2xl flex-col justify-evenly rounded-xl bg-gray-200">
+        <div className="relative overflow-hidden rounded-md">
+          <img
+            className="h-auto max-h-[150px] w-full transform cursor-pointer rounded-t-xl object-cover transition duration-300 ease-in-out hover:scale-105 lg:max-h-[250px]"
+            src={randomRecipe.image || "assets/images/omlette.jpg"}
+            alt="Recipe Image"
+          />
+        </div>
+        <div className="flex flex-col gap-2 p-5">
+          <h2 className="font-castaThin text-5xl font-bold normal-case text-royalGreen">
+            {toTitleCase(randomRecipe.title)}
+          </h2>
 
-        <p>
-          This dish is a flavorful and nutritious meal, perfect for any
-          occasion. Packed with a variety of fresh ingredients, it combines
-          unique flavors and textures to create a satisfying experience. Whether
-          you're cooking for a family dinner or preparing a quick meal, this
-          dish is sure to please everyone with its delicious taste and balanced
-          nutrition.
-        </p>
+          <p>
+            <div
+              className="summary mt-2 line-clamp-4 text-sm text-gray-600 lg:text-base"
+              dangerouslySetInnerHTML={{
+                __html:
+                  cleanedSummary ||
+                  `<p className="line-clamp-5">This dish is a flavorful and nutritious meal, perfect for any occasion. Packed with a variety of fresh ingredients, it combines unique flavors and textures to create a satisfying experience. Whether you're cooking for a family dinner or preparing a quick meal, this dish is sure to please everyone with its delicious taste and balanced nutrition.</p>`,
+              }}
+            />
+          </p>
 
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex flex-row gap-2">
-            <Clock />
-            <p>
-              {randomRecipe.preparationMinutes
-                ? `${randomRecipe.preparationMinutes} min`
-                : "No prep time available"}
-            </p>
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-row gap-2">
+              <Clock />
+              <p>
+                {randomRecipe.preparationMinutes
+                  ? `${randomRecipe.preparationMinutes} min`
+                  : "No prep time available"}
+              </p>
+            </div>
+            <Link to={`/recipe/${randomRecipe.id}/`}>
+              <button className="rounded-md bg-slate-500 p-2 text-white transition-colors duration-300 hover:scale-105 hover:transition-transform hover:duration-300">
+                View Recipe
+              </button>
+            </Link>
           </div>
-          <button className="rounded-md bg-slate-500 p-2 text-white transition-colors duration-300 hover:scale-105 hover:transition-transform hover:duration-300">
-            View Recipe
-          </button>
         </div>
       </div>
     </div>

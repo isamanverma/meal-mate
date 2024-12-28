@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import usernameGenerator from "../utility/usernameGenerator.ts";
 import { Link } from "react-router-dom";
+import { HeartIcon } from "lucide-react";
 
 export default function Navbar() {
   const [name, setName] = useState<string | null>(null);
@@ -18,15 +19,13 @@ export default function Navbar() {
     <nav>
       <ul className="flex gap-5 text-lg">
         <Link to="/fav">
-          <li className="cursor-pointer transition-all hover:font-bold hover:text-blue-600">
-            Favourites
+          <li className="cursor-pointer transition-all hover:font-bold hover:text-blue-600 flex gap-1">
+            <span>Favourites</span>
+            <HeartIcon />
           </li>
         </Link>
 
-        <li className="cursor-pointer transition-all hover:font-bold hover:text-blue-600">
-          Veg
-        </li>
-        <li className="cursor-pointer transition-all hover:font-bold hover:text-blue-600">
+        <li className="cursor-pointer underline transition-all hover:font-bold hover:text-blue-600">
           {name ? usernameGenerator(name.toLowerCase()) : "Loading..."}
         </li>
       </ul>

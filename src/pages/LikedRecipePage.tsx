@@ -8,7 +8,7 @@ export default function LikedRecipePage() {
   const { likedRecipes } = useContext(LikedRecipesContext);
 
   return (
-    <div className="p-5">
+    <div className="p-5 h-screen">
       <Link to="/" className="flex items-center gap-1">
         <ArrowLeftIcon />
         <button className="m-5 rounded-md text-lg">Go Back</button>

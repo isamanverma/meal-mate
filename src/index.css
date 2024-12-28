@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Magtis";
+  src: url("/public/fonts/Magtis-ExtraBold.otf");
+}
+
+@font-face {
+  font-family: "Casta-Thin";
+  src: url("/public/fonts/Casta-Thin.otf");
+}
+
+@font-face {
+  font-family: "Forum";
+  src: url("/public/fonts/Forum-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Work-Sans";
+  src: url("/public/fonts/WorkSans-Regular.ttf");
+}
