@@ -4,8 +4,8 @@ import { Recipe } from "../types/Recipe";
 import { toTitleCase } from "../utility/toTitleCase";
 import wretch from "wretch";
 import LoadingPage from "../pages/LoadingPage";
-import { Link } from "react-router-dom";
 import { cleanRecipeSummary } from "../utility/cleanRecipeSummary";
+import { useNavigate } from "react-router-dom";
 
 interface DiscoverRecipeCardProps {
   triggerFetch: boolean;
@@ -20,6 +20,7 @@ export default function DiscoverRecipeCard({
   const [randomRecipe, setRandomRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Use the useNavigate hook
 
   const fetchRandomRecipe = useCallback(async () => {
     try {
@@ -56,7 +57,7 @@ export default function DiscoverRecipeCard({
     const savedRecipe = localStorage.getItem("randomRecipe");
     const fetchTime = localStorage.getItem("fetchTime");
 
-    const tenMinutes = 10 * 60 * 1000;
+    const tenMinutes = 10 * 60 * 1000; // 10 minutes in milliseconds
     const isExpired =
       fetchTime && Date.now() - parseInt(fetchTime) > tenMinutes;
 
@@ -64,7 +65,9 @@ export default function DiscoverRecipeCard({
       setRandomRecipe(JSON.parse(savedRecipe));
       setLoading(false);
     } else {
-      fetchRandomRecipe();
+      if (!savedRecipe || isExpired) {
+        fetchRandomRecipe();
+      }
     }
   }, [fetchRandomRecipe]);
 
@@ -97,6 +100,11 @@ export default function DiscoverRecipeCard({
   const cleanedSummary = randomRecipe.summary
     ? cleanRecipeSummary(randomRecipe.summary)
     : "";
+
+  const handleNavigate = () => {
+    // Navigate to the discovery page with the random recipe as state
+    navigate("/discover", { state: { randomRecipe } });
+  };
 
   return (
     <div className="relative motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-opacity-in-[0%] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate">
@@ -134,11 +142,12 @@ export default function DiscoverRecipeCard({
                   : "No prep time available"}
               </p>
             </div>
-            <Link to={`/recipe/${randomRecipe.id}/`}>
-              <button className="rounded-md bg-slate-500 p-2 text-white transition-colors duration-300 hover:scale-105 hover:transition-transform hover:duration-300">
-                View Recipe
-              </button>
-            </Link>
+            <button
+              onClick={handleNavigate}
+              className="rounded-md bg-slate-500 p-2 text-white transition-colors duration-300 hover:scale-105 hover:transition-transform hover:duration-300"
+            >
+              View Recipe
+            </button>
           </div>
         </div>
       </div>

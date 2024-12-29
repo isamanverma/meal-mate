@@ -12,19 +12,19 @@ import { LikedRecipesProvider } from "./context/LikedRecipeContext";
 import { useRecipeManager } from "./hooks/useRecipeManager";
 import { useState, useEffect } from "react";
 import { SplashScreen } from "./pages/SplashScreen";
+import DiscoveryRecipeDetails from "./components/DiscoveryRecipeDetails";
 
 function App() {
   const apiKey = import.meta.env.VITE_SPOONACULAR_API;
   const { isSignedIn, recipes } = useRecipeManager(apiKey);
   const [pageLoading, setPageLoading] = useState(true);
 
-  // useEffect to show splash screen for 3 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setPageLoading(false);
-    }, 2500); // 3 seconds
+    }, 2500);
 
-    return () => clearTimeout(timer); // Cleanup timer on component unmount
+    return () => clearTimeout(timer);
   }, []);
 
   const router = createBrowserRouter([
@@ -46,6 +46,10 @@ function App() {
       element: <LikedRecipePage />,
     },
     {
+      path: "/discover",
+      element: <DiscoveryRecipeDetails />,
+    },
+    {
       path: "/recipe/:id",
       element: <RecipeDetails />,
     },
@@ -57,7 +61,7 @@ function App() {
         <SplashScreen />
       ) : (
         <LikedRecipesProvider>
-          <main className="relative bg-sexymaroon font-work text-black">
+          <main className="relative min-h-screen bg-sexymaroon font-work text-black">
             <RouterProvider router={router} />
           </main>
         </LikedRecipesProvider>

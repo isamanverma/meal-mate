@@ -13,12 +13,14 @@ export interface Recipe {
   weightWatcherSmartPoints?: number;
   gaps?: string;
   preparationMinutes?: number | null;
+  readyInMinutes?: number;
   cookingMinutes?: number;
   aggregateLikes?: number;
   healthScore?: number;
   creditsText?: string;
   license?: string;
   sourceName?: string;
+  servings?: number;
   pricePerServing?: number;
   extendedIngredients?: RecipeIngredients[];
   image?: string;
@@ -29,7 +31,7 @@ export interface Recipe {
   diets?: string[];
   occasions?: string[];
   instructions?: string;
-  analyzedInstructions?: Instruction[];
+  analyzedInstructions?: { name: string; steps: Instruction[] }[];
   originalId?: number;
   spoonacularScore?: number;
   spoonacularSourceUrl?: string;

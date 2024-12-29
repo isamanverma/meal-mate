@@ -7,7 +7,7 @@ interface FeaturedProps {
 
 export default function Featured({ recipes }: FeaturedProps) {
   return (
-    <div className="h-screen p-5">
+    <div className=" p-5">
       <h2 className="py-2 font-magtis text-4xl font-bold text-offwhite">
         Featured Recipes
       </h2>

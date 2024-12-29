@@ -15,19 +15,19 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
     : "";
 
   return (
-    <div className="motion-preset-blur-right w-44 cursor-pointer rounded-md bg-offwhite p-2 shadow-2xl shadow-yellow-800 lg:w-[370px]">
+    <div className="w-44 cursor-pointer rounded-md bg-offwhite p-2 shadow-2xl shadow-yellow-800 lg:w-[370px]">
       {/* Link to recipe details */}
       <Link to={`/recipe/${recipe.id}/`}>
         <div className="relative overflow-hidden rounded-md">
           <img
-            src={recipe.image || "/public/assets/images/food-placeholder.png"}
+            src={recipe.image || "/assets/images/food-placeholder.png"}
             alt={recipe.title}
             className="h-24 w-full transform object-cover transition duration-300 ease-in-out hover:scale-105 lg:h-48"
           />
         </div>
 
         <div className="mt-2">
-          <h3 className="text-md font-castaThin font-bold text-royalGreen lg:text-3xl">
+          <h3 className="text-md py-3 font-castaThin font-bold text-royalGreen lg:text-3xl">
             {toTitleCase(recipe.title)}
           </h3>
           <div

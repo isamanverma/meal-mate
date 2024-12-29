@@ -8,13 +8,15 @@ export default function LikedRecipePage() {
   const { likedRecipes } = useContext(LikedRecipesContext);
 
   return (
-    <div className="p-5 h-screen">
-      <Link to="/" className="flex items-center gap-1">
+    <div className="h-screen p-5 text-offwhite">
+      <Link to="/" className="flex items-center">
         <ArrowLeftIcon />
         <button className="m-5 rounded-md text-lg">Go Back</button>
       </Link>
       <div className="mx-auto max-w-full lg:max-w-7xl">
-        <h2 className="py-2 text-3xl font-bold">Liked Recipes</h2>
+        <h2 className="py-2 font-castaThin text-5xl font-bold">
+          Liked Recipes
+        </h2>
         {likedRecipes.length > 0 ? (
           <div className="flex flex-wrap gap-4 lg:gap-6">
             {likedRecipes.map((recipe) => (
