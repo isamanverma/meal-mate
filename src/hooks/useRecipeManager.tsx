@@ -49,5 +49,5 @@ export function useRecipeManager(apiKey: string) {
     return () => clearInterval(intervalId);
   }, [fetchRecipes]);
 
-  return { isSignedIn, recipes };
+  return { isSignedIn, setIsSignedIn, recipes };
 }

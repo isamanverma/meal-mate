@@ -16,7 +16,7 @@ import DiscoveryRecipeDetails from "./components/DiscoveryRecipeDetails";
 
 function App() {
   const apiKey = import.meta.env.VITE_SPOONACULAR_API;
-  const { isSignedIn, recipes, setIsSignedIn } = useRecipeManager(apiKey); // Added setIsSignedIn from your hook
+  const { isSignedIn, recipes, setIsSignedIn } = useRecipeManager(apiKey);
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function App() {
   }, []);
 
   const handleSignIn = () => {
-    setIsSignedIn(true); // Update state when the user signs in
+    setIsSignedIn(true);
   };
 
   const router = createBrowserRouter([
@@ -43,7 +43,7 @@ function App() {
     },
     {
       path: "/signup",
-      element: <Signup isSignedIn={isSignedIn} onSignIn={handleSignIn} />, // Added onSignIn
+      element: <Signup isSignedIn={isSignedIn} onSignIn={handleSignIn} />,
     },
     {
       path: "/fav",
