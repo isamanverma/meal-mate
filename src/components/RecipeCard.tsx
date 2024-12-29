@@ -15,7 +15,7 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
     : "";
 
   return (
-    <div className="w-44 cursor-pointer rounded-md bg-offwhite p-2 shadow-2xl shadow-yellow-800 lg:w-[370px]">
+    <div className="flex w-44 cursor-pointer flex-col justify-between rounded-md bg-offwhite p-2 shadow-2xl shadow-yellow-800 lg:w-[370px]">
       {/* Link to recipe details */}
       <Link to={`/recipe/${recipe.id}/`}>
         <div className="relative overflow-hidden rounded-md">
@@ -40,7 +40,7 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
           />
         </div>
       </Link>
-      <div className="flex items-center justify-between">
+      <div className="mb-2 flex flex-row items-center justify-between">
         <div className="mt-3 text-xs text-gray-500 lg:mt-5 lg:text-sm">
           <p>
             Prep Time:

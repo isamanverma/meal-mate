@@ -109,7 +109,7 @@ export default function DiscoverRecipeCard({
   return (
     <div className="relative motion-scale-in-[0.5] motion-translate-x-in-[-25%] motion-translate-y-in-[25%] motion-rotate-in-[-10deg] motion-blur-in-[5px] motion-opacity-in-[0%] motion-duration-[0.35s] motion-duration-[0.53s]/scale motion-duration-[0.53s]/translate motion-duration-[0.63s]/rotate">
       <div className="absolute -inset-0.5 rounded-xl bg-amber-800 opacity-90 blur-2xl"></div>
-      <div className="relative ml-auto flex max-w-2xl flex-col justify-evenly rounded-xl bg-gray-200">
+      <div className="relative ml-auto flex max-w-2xl flex-col justify-evenly rounded-xl bg-rose-50 text-sexymaroon">
         <div className="relative overflow-hidden rounded-md">
           <img
             className="h-auto max-h-[150px] w-full transform cursor-pointer rounded-t-xl object-cover transition duration-300 ease-in-out hover:scale-105 lg:max-h-[250px]"
@@ -118,13 +118,13 @@ export default function DiscoverRecipeCard({
           />
         </div>
         <div className="flex flex-col gap-2 p-5">
-          <h2 className="font-castaThin text-5xl font-bold normal-case text-royalGreen">
+          <h2 className="font-castaThin text-5xl font-bold normal-case">
             {toTitleCase(randomRecipe.title)}
           </h2>
 
           <p>
             <div
-              className="summary mt-2 line-clamp-4 text-sm text-gray-600 lg:text-base"
+              className="summary mt-2 line-clamp-4 text-sm lg:text-base"
               dangerouslySetInnerHTML={{
                 __html:
                   cleanedSummary ||
