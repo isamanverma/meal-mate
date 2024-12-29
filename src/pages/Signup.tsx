@@ -4,40 +4,25 @@ import Header from "../components/Header";
 
 interface SignupProps {
   isSignedIn: boolean;
-}
-
-enum DietaryPreference {
-  VEG = "Veg",
-  NON_VEG = "Non-Veg",
-  VEGAN = "Vegan",
+  onSignIn: () => void; // Callback to notify parent of sign-in
 }
 
 interface FormData {
   name: string;
   email: string;
   password: string;
-  dietaryPreference: DietaryPreference | "";
 }
 
-export default function Signup({ isSignedIn }: SignupProps) {
+export default function Signup({ isSignedIn, onSignIn }: SignupProps) {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     password: "",
-    dietaryPreference: "",
   });
 
-  const [redirect, setRedirect] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  // Redirect early if the user is signed in
-  if (isSignedIn) {
-    return <Navigate to="/" />;
-  }
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setError(""); // Clear error on input change
 
@@ -51,22 +36,19 @@ export default function Signup({ isSignedIn }: SignupProps) {
     e.preventDefault();
 
     // Validate form data
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.password ||
-      !formData.dietaryPreference
-    ) {
+    if (!formData.name || !formData.email || !formData.password) {
       setError("Please fill out all fields before submitting.");
       return;
     }
 
-    // Save data and redirect
+    // Save data to local storage
     localStorage.setItem("user", JSON.stringify(formData));
-    setRedirect(true);
+
+    // Notify parent component about sign-in
+    onSignIn();
   };
 
-  if (redirect) {
+  if (isSignedIn) {
     return <Navigate to="/" />;
   }
 
@@ -146,37 +128,6 @@ export default function Signup({ isSignedIn }: SignupProps) {
               placeholder="Enter your password"
               className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm text-gray-900 shadow-sm outline-none focus:ring-2 focus:ring-red-500"
             />
-          </div>
-
-          {/* Dietary Preference Dropdown */}
-          <div>
-            <label
-              htmlFor="dietaryPreference"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Dietary Preference
-            </label>
-            <select
-              id="dietaryPreference"
-              name="dietaryPreference"
-              value={formData.dietaryPreference}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm text-gray-900 shadow-sm outline-none focus:ring-2 focus:ring-red-500"
-            >
-              <option value="" disabled>
-                Select your preference
-              </option>
-              <option value={DietaryPreference.VEG}>
-                {DietaryPreference.VEG}
-              </option>
-              <option value={DietaryPreference.NON_VEG}>
-                {DietaryPreference.NON_VEG}
-              </option>
-              <option value={DietaryPreference.VEGAN}>
-                {DietaryPreference.VEGAN}
-              </option>
-            </select>
           </div>
 
           {/* Submit Button */}
