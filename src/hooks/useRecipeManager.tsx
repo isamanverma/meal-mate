@@ -3,13 +3,12 @@ import wretch from "wretch";
 import { ApiResponse, Recipe } from "../types/Recipe";
 
 export function useRecipeManager(apiKey: string) {
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   const fetchRecipes = useCallback(async () => {
     try {
       const response = await wretch(
-        `https://api.spoonacular.com/recipes/random?limitLicense=true&number=28&include-tag=vegetarian&exclude-tag=beef,pork&apiKey=${apiKey}`,
+        `https://api.spoonacular.com/recipes/random?limitLicense=true&number=500&include-tag=vegetarian&exclude-tag=beef,pork&apiKey=${apiKey}`,
       )
         .get()
         .json<ApiResponse>();
@@ -24,12 +23,8 @@ export function useRecipeManager(apiKey: string) {
   }, [apiKey]);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    setIsSignedIn(!!savedUser);
-
     const savedRecipes = localStorage.getItem("recipes");
     const lastFetched = localStorage.getItem("lastFetched");
-
     const currentTime = new Date().getTime();
 
     if (
@@ -49,5 +44,5 @@ export function useRecipeManager(apiKey: string) {
     return () => clearInterval(intervalId);
   }, [fetchRecipes]);
 
-  return { isSignedIn, setIsSignedIn, recipes };
+  return { recipes };
 }

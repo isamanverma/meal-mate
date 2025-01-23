@@ -7,16 +7,15 @@ import Header from "./Header";
 import Hero from "./Hero";
 
 interface HomePageProps {
-  isSignedIn: boolean;
   recipes: Recipe[];
 }
 
-export default function HomePage({ isSignedIn, recipes }: HomePageProps) {
+export default function HomePage({ recipes }: HomePageProps) {
   return (
     <>
       <div className="mx-auto max-w-full lg:max-w-7xl">
         <Spoon />
-        <Header isSignedIn={isSignedIn} />
+        <Header />
         <Fork />
         <Hero />
         <Featured recipes={recipes} />

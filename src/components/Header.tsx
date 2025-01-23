@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 
-interface SignupProps {
-  isSignedIn: boolean;
-}
-
-export default function Header({ isSignedIn }: SignupProps) {
+export default function Header() {
   return (
     <div className="flex flex-row items-center justify-between p-3 text-offwhite lg:p-0">
       <Link to="/">
@@ -20,7 +16,7 @@ export default function Header({ isSignedIn }: SignupProps) {
           </h1>
         </div>
       </Link>
-      {isSignedIn && <Navbar />}
+      <Navbar />
     </div>
   );
 }
